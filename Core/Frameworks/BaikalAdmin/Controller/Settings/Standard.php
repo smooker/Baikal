@@ -29,10 +29,10 @@ namespace BaikalAdmin\Controller\Settings;
 class Standard extends \Flake\Core\Controller {
 		
 	public function execute() {
-		$this->oModel = new \Baikal\Model\Config\Standard(PROJECT_PATH_SPECIFIC . "config.php");
+		$this->oModel = new \Baikal\Model\Config\Standard();
 		
 		# Assert that config file is writable
-		if(!$this->oModel->writable()) {
+		if(!$GLOBALS["SERVICES"]["CONFIGADAPTER"]->writable($this->oModel)) {
 			throw new \Exception("Config file is not writable;" . __FILE__ . " > " . __LINE__);
 		}
 		

@@ -88,6 +88,6 @@ class Framework extends \Flake\Core\Framework {
 	
 	# Mapping PHP errors to exceptions; needed by SabreDAV
 	public static function exception_error_handler($errno, $errstr, $errfile, $errline) {
-		throw new \ErrorException($errstr, 0, $errno, $errfile, $errline);
+		throw new \ErrorException("[" . $errfile . ":" . $errline . "] " . $errstr, 0, $errno, $errfile, $errline);
 	}
 }

@@ -104,7 +104,20 @@ class Framework extends \Flake\Core\Framework {
 		if(!defined('CR')) {
 			define('CR', chr(13));
 		}
-
+		
+		# Determine if we're in Heroku
+		if(
+			(array_key_exists("HEROKU", $_ENV) && intval($_ENV["HEROKU"]) === 1) ||
+			(array_key_exists("HEROKU", $_SERVER) && intval($_SERVER["HEROKU"]) === 1)
+		) {
+			ini_set("display_errors", 1);
+			ini_set("error_reporting", E_ALL);
+			
+			define("HEROKU_SERVER", TRUE);
+		} else {
+			define("HEROKU_SERVER", FALSE);
+		}
+		
 		if(array_key_exists("SERVER_NAME", $_SERVER) && $_SERVER["SERVER_NAME"] === "mongoose") {
 			define("MONGOOSE_SERVER", TRUE);
 		} else {
@@ -216,12 +229,35 @@ class Framework extends \Flake\Core\Framework {
 	}
 	
 	protected static function initDb() {
-
-		if(defined("PROJECT_DB_MYSQL") && PROJECT_DB_MYSQL === TRUE) {
+		
+		if(HEROKU_SERVER === TRUE) {
+			self::initHerokuDb();
+		} elseif(defined("PROJECT_DB_MYSQL") && PROJECT_DB_MYSQL === TRUE) {
 			self::initDbMysql();
 		} else {
 			self::initDbSqlite();
 		}
+	}
+	
+	protected static function initHerokuDb() {
+		if(
+			!array_key_exists("DATABASE_URL", $_ENV) &&
+			!array_key_exists("DATABASE_URL", $_SERVER)
+		) {
+			die("<h3>Heroku DATABASE_URL is not set !</h3>");
+		}
+		
+		$sUrl = isset($_ENV["DATABASE_URL"]) ? $_ENV["DATABASE_URL"] : $_SERVER["DATABASE_URL"];
+		$aURL = parse_url($sUrl);
+		
+		$GLOBALS["DB"] = new \Flake\Core\Database\Postgresql(
+			$aURL["host"],
+			substr($aURL["path"], 1),
+			$aURL["user"],
+			$aURL["pass"]
+		);
+		
+		return TRUE;
 	}
 	
 	protected static function initDbSqlite() {

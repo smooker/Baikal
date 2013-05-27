@@ -26,7 +26,11 @@
 
 namespace Baikal\Model\Config;
 
-class System extends \Baikal\Model\Config {
+class System extends \Baikal\Model\Config\AbstractPHPBased {
+	
+	public function getFilePath() {
+		return PROJECT_PATH_SPECIFIC . "config.system.php";
+	}
 	
 	protected $aConstants = array(
 		"BAIKAL_PATH_SABREDAV" => array(

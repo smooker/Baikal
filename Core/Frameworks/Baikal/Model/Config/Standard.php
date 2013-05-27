@@ -27,8 +27,8 @@
 namespace Baikal\Model\Config;
 
 class Standard extends \Baikal\Model\Config {
-	
-	protected $aConstants = array(
+
+	public $aConstants = array(
 		"PROJECT_TIMEZONE" => array(
 			"type" => "string",
 			"comment" => "Timezone of the server; if unsure, check http://en.wikipedia.org/wiki/List_of_tz_database_time_zones",
@@ -60,7 +60,7 @@ class Standard extends \Baikal\Model\Config {
 	);
 	
 	# Default values
-	protected $aData = array(
+	public $aData = array(
 		"PROJECT_TIMEZONE" => "Europe/Paris",
 		"BAIKAL_CARD_ENABLED" => TRUE,
 		"BAIKAL_CAL_ENABLED" => TRUE,
@@ -166,57 +166,5 @@ class Standard extends \Baikal\Model\Config {
 		}
 		
 		return parent::get($sProp);
-	}
-
-	protected function createDefaultConfigFilesIfNeeded() {
-
-		# Create empty config.php if needed
-		if(!file_exists(PROJECT_PATH_SPECIFIC . "config.php")) {
-			@touch(PROJECT_PATH_SPECIFIC . "config.php");
-			$sContent = "<?php\n" . \Baikal\Core\Tools::getCopyrightNotice() . "\n\n";
-			$sContent .= $this->getDefaultConfig();
-			file_put_contents(PROJECT_PATH_SPECIFIC . "config.php", $sContent);
-		}
-		
-		# Create empty config.system.php if needed
-		if(!file_exists(PROJECT_PATH_SPECIFIC . "config.system.php")) {
-			@touch(PROJECT_PATH_SPECIFIC . "config.system.php");
-			$sContent = "<?php\n" . \Baikal\Core\Tools::getCopyrightNotice() . "\n\n";
-			$sContent .= $this->getDefaultSystemConfig();
-			file_put_contents(PROJECT_PATH_SPECIFIC . "config.system.php", $sContent);
-		}
-	}
-	
-	protected static function getDefaultConfig() {
-
-		$sCode =<<<CODE
-##############################################################################
-# Required configuration
-# You *have* to review these settings for Baïkal to run properly
-#
-
-# Timezone of your users, if unsure, check http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
-define("PROJECT_TIMEZONE", "Europe/Paris");
-
-# CardDAV ON/OFF switch; default TRUE
-define("BAIKAL_CARD_ENABLED", TRUE);
-
-# CalDAV ON/OFF switch; default TRUE
-define("BAIKAL_CAL_ENABLED", TRUE);
-
-# WebDAV authentication type; default Digest
-define("BAIKAL_DAV_AUTH_TYPE", "Digest")
-
-# Baïkal Web Admin ON/OFF switch; default TRUE
-define("BAIKAL_ADMIN_ENABLED", TRUE);
-
-# Baïkal Web Admin autolock ON/OFF switch; default FALSE
-define("BAIKAL_ADMIN_AUTOLOCKENABLED", FALSE);
-
-# Baïkal Web admin password hash; Set via Baïkal Web Admin
-define("BAIKAL_ADMIN_PASSWORDHASH", "");
-CODE;
-		$sCode = trim($sCode);
-		return $sCode;
 	}
 }

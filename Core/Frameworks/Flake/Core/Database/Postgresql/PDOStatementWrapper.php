@@ -5,10 +5,10 @@
 #  (c) 2012 Jérôme Schneider <mail@jeromeschneider.fr>
 #  All rights reserved
 #
-#  http://baikal.codr.fr
+#  http://flake.codr.fr
 #
-#  This script is part of the Baïkal Server project. The Baïkal
-#  Server project is free software; you can redistribute it
+#  This script is part of the Flake project. The Flake
+#  project is free software; you can redistribute it
 #  and/or modify it under the terms of the GNU General Public
 #  License as published by the Free Software Foundation; either
 #  version 2 of the License, or (at your option) any later version.
@@ -24,36 +24,20 @@
 #  This copyright notice MUST APPEAR in all copies of the script!
 #################################################################
 
-namespace Baikal\Model;
+namespace Flake\Core\Database\Postgresql;
 
-abstract class Config extends \Flake\Core\Model\NoDb {
-
-	protected $aConstants = array();
-	protected $aData = array();
-
-	public function construct() {
-		$this->aData = $GLOBALS['SERVICES']['CONFIGADAPTER']->fetch($this);
+class PDOStatementWrapper {
+	protected $oPDOStatement = null;
+	
+	public function __construct(\PDOStatement $oPDOStatement) {
+		$this->oPDOStatement = $oPDOStatement;
 	}
-
-	public static function icon() {
-		return "icon-cog";
-	}
-
-	public static function mediumicon() {
-		return "glyph-cogwheel";
-	}
-
-	public static function bigicon() {
-		return "glyph2x-cogwheel";
-	}
-
-	public function destroy() {
-	}
-
-	protected static function getDefaultConfig() {
-	}
-
-	public function persist() {
-		$GLOBALS['SERVICES']['CONFIGADAPTER']->persist($this);
+	
+	public function __call($name, $arguments) {
+		#if(strtolower($name) === "execute") {
+		#	\Flake\Util\Tools::log("PDOStatement::execute() !!!; " . print_r($arguments[0], TRUE));
+		#}
+		
+		return call_user_func_array(array($this->oPDOStatement, $name), $arguments);
 	}
 }

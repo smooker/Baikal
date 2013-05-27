@@ -34,6 +34,8 @@ class Framework extends \Flake\Core\Framework {
 		\Baikal\Framework::bootstrap();
 		\Formal\Framework::bootstrap();
 
+		$GLOBALS["SERVICES"]["CONFIGADAPTER"] = new \BaikalAdmin\Core\ConfigAdapter\PHP();
+
 		$GLOBALS["ROUTER"]::setURIPath("admin/");
 
 		# Include BaikalAdmin Framework config
