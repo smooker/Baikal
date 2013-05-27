@@ -26,7 +26,7 @@
 
 namespace BaikalAdmin\Core\ConfigAdapter;
 
-class PHP {
+class PHPConstants extends \BaikalAdmin\Core\ConfigAdapter {
 
 	protected function getFilePath(\Baikal\Model\Config $configobject) {
 		$filesforclass = array(

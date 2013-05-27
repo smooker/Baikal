@@ -26,13 +26,9 @@
 
 namespace Baikal\Model\Config;
 
-class System extends \Baikal\Model\Config\AbstractPHPBased {
+class System extends \Baikal\Model\Config {
 	
-	public function getFilePath() {
-		return PROJECT_PATH_SPECIFIC . "config.system.php";
-	}
-	
-	protected $aConstants = array(
+	public $aConstants = array(
 		"BAIKAL_PATH_SABREDAV" => array(
 			"type" => "litteral",
 			"comment" => "PATH to SabreDAV",
@@ -84,7 +80,7 @@ class System extends \Baikal\Model\Config\AbstractPHPBased {
 	);
 	
 	# Default values
-	protected $aData = array(
+	public $aData = array(
 		"BAIKAL_PATH_SABREDAV" => 'PROJECT_PATH_FRAMEWORKS . "SabreDAV/lib/Sabre/"',
 		"BAIKAL_AUTH_REALM" => "BaikalDAV",
 		"BAIKAL_CARD_BASEURI" => 'PROJECT_BASEURI . "card.php/"',
@@ -191,7 +187,7 @@ class System extends \Baikal\Model\Config\AbstractPHPBased {
 		return "Baïkal Settings";
 	}
 
-	protected static function getDefaultConfig() {
+/*	protected static function getDefaultConfig() {
 
 		$sBaikalVersion = BAIKAL_VERSION;
 
@@ -244,5 +240,5 @@ define("BAIKAL_CONFIGURED_VERSION", "{$sBaikalVersion}");
 CODE;
 		$sCode = trim($sCode);
 		return $sCode;
-	}
+	}*/
 }

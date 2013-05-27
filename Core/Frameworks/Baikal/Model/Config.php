@@ -31,8 +31,12 @@ abstract class Config extends \Flake\Core\Model\NoDb {
 	protected $aConstants = array();
 	protected $aData = array();
 
-	public function construct() {
+	public function __construct() {
 		$this->aData = $GLOBALS['SERVICES']['CONFIGADAPTER']->fetch($this);
+	}
+
+	public function floating() {
+		$GLOBALS['SERVICES']['CONFIGADAPTER']->floating($this);
 	}
 
 	public static function icon() {

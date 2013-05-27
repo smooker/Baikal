@@ -29,11 +29,12 @@ namespace BaikalAdmin\Controller\Settings;
 class System extends \Flake\Core\Controller {
 	
 	public function execute() {
-		$this->oModel = new \Baikal\Model\Config\System(PROJECT_PATH_SPECIFIC . "config.system.php");
+
+		$this->oModel = new \Baikal\Model\Config\System();
 		
 		# Assert that config file is writable
-		if(!$this->oModel->writable()) {
-			throw new \Exception("System config file is not writable;" . __FILE__ . " > " . __LINE__);
+		if(!$GLOBALS["SERVICES"]["CONFIGADAPTER"]->writable($this->oModel)) {
+			throw new \Exception("Config file is not writable;" . __FILE__ . " > " . __LINE__);
 		}
 		
 		$this->oForm = $this->oModel->formForThisModelInstance(array(

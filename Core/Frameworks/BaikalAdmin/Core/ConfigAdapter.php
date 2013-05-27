@@ -24,33 +24,20 @@
 #  This copyright notice MUST APPEAR in all copies of the script!
 #################################################################
 
-namespace BaikalAdmin\Controller\Settings;
+namespace BaikalAdmin\Core;
 
-class Standard extends \Flake\Core\Controller {
-		
-	public function execute() {
+abstract class ConfigAdapter {
 
-		$this->oModel = new \Baikal\Model\Config\Standard();
-		
-		# Assert that config file is writable
-		if(!$GLOBALS["SERVICES"]["CONFIGADAPTER"]->writable($this->oModel)) {
-			throw new \Exception("Config file is not writable;" . __FILE__ . " > " . __LINE__);
-		}
-		
-		$this->oForm = $this->oModel->formForThisModelInstance(array(
-			"close" => FALSE
-		));
-		
-		if($this->oForm->submitted()) {
-			$this->oForm->execute();
-		}
-	}
+	# Is the config writable ?
+	public abstract function writable(\Baikal\Model\Config $configobject);
 
-	public function render() {
-		
-		$oView = new \BaikalAdmin\View\Settings\Standard();
-		$oView->setData("form", $this->oForm->render());
-		
-		return $oView->render();
-	}
+	# Is the config already persisted, or not (floating) ?
+	public abstract function floating();
+
+	# Converts the given config object as an array and returns it
+	public abstract function fetch(\Baikal\Model\Config $configobject); 
+
+	# Persists the givent config object
+	public abstract function persist(\Baikal\Model\Config $configobject);
+
 }
