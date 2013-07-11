@@ -41,6 +41,8 @@ abstract class Database extends \Flake\Core\FLObject {
 
 	public function INSERTquery($table,$fields_values,$no_quote_fields=FALSE)	{
 
+		#var_dump($fields_values);
+		#die();
 			// Table and fieldnames should be "SQL-injection-safe" when supplied to this function (contrary to values in the arrays which may be insecure).
 		if (is_array($fields_values) && count($fields_values))	{
 
@@ -50,14 +52,14 @@ abstract class Database extends \Flake\Core\FLObject {
 				// Build query:
 			$query = 'INSERT INTO '.$table.'
 				(
-					'.implode(',
-					',array_keys($fields_values)).'
+					"'.implode('",
+					"',array_keys($fields_values)).'"
 				) VALUES (
 					'.implode(',
 					',$fields_values).'
 				)';
 
-				// Return query:
+			// Return query:
 			if ($this->debugOutput || $this->store_lastBuiltQuery) $this->debug_lastBuiltQuery = $query;
 			return $query;
 		}
@@ -155,6 +157,10 @@ abstract class Database extends \Flake\Core\FLObject {
 	}
 	
 	public function fullQuote($str, $table)	{
+		if(is_bool($str)) {
+			return intval($str);
+		}
+
 		return '\''.$this->quote($str, $table).'\'';
 	}
 

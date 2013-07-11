@@ -145,6 +145,7 @@ class Framework extends \Flake\Core\Framework {
 		define("PROJECT_PATH_CORE", PROJECT_PATH_ROOT . "Core/");
 		define("PROJECT_PATH_CORERESOURCES", PROJECT_PATH_CORE . "Resources/");
 		define("PROJECT_PATH_SPECIFIC", PROJECT_PATH_ROOT . "Specific/");
+		define("PROJECT_PATH_VENDOR", PROJECT_PATH_ROOT . "vendor/");
 		define("PROJECT_PATH_FRAMEWORKS", PROJECT_PATH_CORE . "Frameworks/");
 		define("PROJECT_PATH_WWWROOT", PROJECT_PATH_CORE . "WWWRoot/");
 
@@ -244,7 +245,7 @@ class Framework extends \Flake\Core\Framework {
 			!array_key_exists("DATABASE_URL", $_ENV) &&
 			!array_key_exists("DATABASE_URL", $_SERVER)
 		) {
-			die("<h3>Heroku DATABASE_URL is not set !</h3>");
+			throw new \Exception("<strong>Fatal error</strong>: DATABASE_URL environment variable not found. See https://devcenter.heroku.com/articles/heroku-postgresql#create-new-db for database creation, and https://devcenter.heroku.com/articles/heroku-postgresql#establish-primary-db to define your database as the one to be used by Baikal.");
 		}
 		
 		$sUrl = isset($_ENV["DATABASE_URL"]) ? $_ENV["DATABASE_URL"] : $_SERVER["DATABASE_URL"];
@@ -252,9 +253,10 @@ class Framework extends \Flake\Core\Framework {
 		
 		$GLOBALS["DB"] = new \Flake\Core\Database\Postgresql(
 			$aURL["host"],
-			substr($aURL["path"], 1),
-			$aURL["user"],
-			$aURL["pass"]
+			array_key_exists('path', $aURL) ? substr($aURL["path"], 1) : FALSE,
+			array_key_exists('user', $aURL) ? $aURL['user'] : FALSE,
+			array_key_exists('pass', $aURL) ? $aURL['pass'] : FALSE,
+			array_key_exists('port', $aURL) ? $aURL['port'] : FALSE
 		);
 		
 		return TRUE;

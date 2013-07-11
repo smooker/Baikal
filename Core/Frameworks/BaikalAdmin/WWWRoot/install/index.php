@@ -58,9 +58,15 @@ $oPage->setBaseUrl(PROJECT_URI);
 $oPage->zone("navbar")->addBlock(new \BaikalAdmin\Controller\Navigation\Topbar\Install());
 
 if(!defined("BAIKAL_CONFIGURED_VERSION")) {
-	# we have to upgrade Baïkal (existing installation)
-	$oPage->zone("Payload")->addBlock(new \BaikalAdmin\Controller\Install\Initialize());
-	
+	if(
+		HEROKU_SERVER &&
+		\BaikalAdmin\Controller\Install\InitializeHeroku::getDatabaseStructureStatus($GLOBALS['DB']) !== \BaikalAdmin\Controller\Install\InitializeHeroku::DB_STATUS_STRUCTURE_COMPLETE
+	) {
+		$oPage->zone("Payload")->addBlock(new \BaikalAdmin\Controller\Install\InitializeHeroku());
+	} else {
+		# we have to initialize Baïkal (new installation)
+		$oPage->zone("Payload")->addBlock(new \BaikalAdmin\Controller\Install\Initialize());
+	}
 } elseif(!defined("BAIKAL_ADMIN_PASSWORDHASH")) {
 	# we have to set an admin password
 	$oPage->zone("Payload")->addBlock(new \BaikalAdmin\Controller\Install\Initialize());

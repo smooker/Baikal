@@ -24,40 +24,8 @@
 #  This copyright notice MUST APPEAR in all copies of the script!
 #################################################################
 
-namespace Baikal\Model;
+namespace BaikalAdmin\View\Install\InitializeHeroku;
 
-abstract class Config extends \Flake\Core\Model\NoDb {
-
-	protected $aConstants = array();
-	protected $aData = array();
-
-	public function __construct() {
-		$this->aData = $GLOBALS['SERVICES']['CONFIGADAPTER']->fetch($this);
-	}
-
-	public function floating() {
-		return $GLOBALS['SERVICES']['CONFIGADAPTER']->floating($this);
-	}
-
-	public static function icon() {
-		return "icon-cog";
-	}
-
-	public static function mediumicon() {
-		return "glyph-cogwheel";
-	}
-
-	public static function bigicon() {
-		return "glyph2x-cogwheel";
-	}
-
-	public function destroy() {
-	}
-
-	protected static function getDefaultConfig() {
-	}
-
-	public function persist() {
-		$GLOBALS['SERVICES']['CONFIGADAPTER']->persist($this);
-	}
+class DbEmpty extends \BaikalAdmin\Core\View {
+	
 }

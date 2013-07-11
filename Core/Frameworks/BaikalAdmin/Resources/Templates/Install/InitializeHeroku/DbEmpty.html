@@ -1,0 +1,15 @@
+{% autoescape false %}
+<header class="jumbotron subhead" id="overview">
+	<h1><i class="glyph2x-magic"></i>Baïkal initialization wizard</h1>
+	<p class="lead">Heroku database initialization for Baïkal <strong>{{ baikalversion }}</strong>.</p>
+</header>
+
+<p>The database used by Baïkal contains none of the required tables.</p>
+<p>You are most probably installing Baïkal on this database for the first time. Baïkal can create the required tables for you.</p>
+
+<form action="{{ thisurl }}" method="post">
+	<input type="hidden" name="proceed-wih-db-init" value="1" />
+	<p>Click this button to <input type="submit" class="btn btn-success" value="Initialize Baïkal database" /></p>
+</form>
+
+{% endautoescape %}

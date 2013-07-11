@@ -32,7 +32,7 @@ abstract class ConfigAdapter {
 	public abstract function writable(\Baikal\Model\Config $configobject);
 
 	# Is the config already persisted, or not (floating) ?
-	public abstract function floating();
+	public abstract function floating(\Baikal\Model\Config $configobject);
 
 	# Converts the given config object as an array and returns it
 	public abstract function fetch(\Baikal\Model\Config $configobject); 

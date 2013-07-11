@@ -28,20 +28,58 @@ namespace BaikalAdmin\Core\ConfigAdapter;
 
 class Database extends \BaikalAdmin\Core\ConfigAdapter {
 
+	protected function getTableName(\Baikal\Model\Config $configobject) {
+		
+		$tableforclass = array(
+			'Baikal\Model\Config\Standard' => 'baikal_config_standard',
+			'Baikal\Model\Config\System' => 'baikal_config_system',
+		);
+
+		return $tableforclass[get_class($configobject)];
+	}
+
 	public function writable(\Baikal\Model\Config $configobject) {
 		return TRUE;
 	}
 
-	public function floating() {
-		return FALSE;
+	public function floating(\Baikal\Model\Config $configobject) {
+		$oStmt = $GLOBALS['DB']->exec_SELECTquery(
+			'*',
+			$this->getTableName($configobject),
+			'1=1'
+		);
+
+		return ($oStmt->fetch()) === FALSE;
 	}
 
 	public function fetch(\Baikal\Model\Config $configobject) {
-		return $configobject->aData;
-	} 
+		if($this->floating($configobject)) {
+			return $configobject->aData;
+		}
+
+		$oStmt = $GLOBALS['DB']->exec_SELECTquery(
+			'*',
+			$this->getTableName($configobject),
+			'1=1'
+		);
+
+		return $oStmt->fetch();
+	}
 
 	public function persist(\Baikal\Model\Config $configobject) {
-		var_dump($configobject->aData);
+		if($this->floating($configobject)) {
+			$GLOBALS['DB']->exec_INSERTquery(
+				$this->getTableName($configobject),
+				$configobject->aData
+			);
+		} else {
+			$GLOBALS['DB']->exec_UPDATEquery(
+				$this->getTableName($configobject),
+				'1=1',
+				$configobject->aData
+			);
+		}
+
 		return TRUE;
 	}
 }

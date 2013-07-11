@@ -47,7 +47,7 @@ class PHPConstants extends \BaikalAdmin\Core\ConfigAdapter {
 		);
 	}
 
-	public function floating() {
+	public function floating(\Baikal\Model\Config $configobject) {
 		return FALSE;
 	}
 
@@ -85,7 +85,7 @@ class PHPConstants extends \BaikalAdmin\Core\ConfigAdapter {
 
 			if($iNbRes === 1) {
 				# Exactly one match
-				# O would be not enough, and > 1, to much to handle properly
+				# O would be not enough, and > 1 too much to handle properly
 
 				$sValue = $aMatches[1][0];	# first capture (.*?), first occurence (anyway, we asserted that there's only one)
 				switch($aConstant["type"]) {

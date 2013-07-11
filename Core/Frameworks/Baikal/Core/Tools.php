@@ -44,8 +44,17 @@ class Tools {
 
 		# Asserting PDO::SQLite or PDO::MySQL
 		$aPDODrivers = \PDO::getAvailableDrivers();
-		if(!in_array('sqlite', $aPDODrivers) && !in_array('mysql', $aPDODrivers)) {
-			die('<strong>Baikal Fatal Error</strong>: Both <strong>PDO::sqlite</strong> and <strong>PDO::mysql</strong> are unavailable. One of them at least is required by Baikal.');
+		if(
+			!in_array('sqlite', $aPDODrivers) &&
+			!in_array('mysql', $aPDODrivers) &&
+			!in_array('pgsql', $aPDODrivers)
+		) {
+			die('<strong>Baikal Fatal Error</strong>: <strong>PDO::sqlite</strong>, <strong>PDO::mysql</strong> and <strong>PDO::pgsql</strong> are unavailable. One of them at least is required by Baikal.');
+		}
+
+		# Asserting that dependencies have been installed
+		if(!file_exists(PROJECT_PATH_VENDOR) || !file_exists(PROJECT_PATH_VENDOR . 'autoload.php')) {
+			die('<strong>Baikal Fatal Error</strong>: the file <b>vendor/autoload.php</b> is nowhere to be found. Please make sure that you have installed the required dependencies.');
 		}
 	}
 	
@@ -112,6 +121,8 @@ class Tools {
 			"locks",
 			"principals",
 			"users",
+			"baikal_config_standard",
+			"baikal_config_system",
 		);
 	}
 	
