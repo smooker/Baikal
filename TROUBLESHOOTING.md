@@ -20,7 +20,7 @@ Note: if this file is empty / does not exist, you should try to add it manually
 
 To troubleshoot user auth / data access, you may use curl to debug server responses. On a command line, run:
 
-	curl -so - --digest --user username:password http://hostname/cal.php/calendars/username/default
+	curl -o - --digest --user username:password http://hostname/cal.php/calendars/username/default
 
 (Be sure that the username exists, has the right password set, and has a calendar named default first).
 
